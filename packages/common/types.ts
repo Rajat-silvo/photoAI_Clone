@@ -73,7 +73,6 @@ export const GenerateImage = z.object({
 });
 
 export const GenerateImageFromPack = z.object({
-  prompt: z.string(),
   modelId: z.string(),
   packId: z.string(),
 });

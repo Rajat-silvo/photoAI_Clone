@@ -1,8 +1,9 @@
-import express, { response } from "express";
+import express from "express";
 import { TrainModel, GenerateImage, GenerateImageFromPack } from "common/types";
 import { prismaClient } from "db"; // Importing the Prisma client
 import { S3Client } from "bun";
 import { FalAIModel } from "./models/FalAIModel";
+import { fal } from "@fal-ai/client";
 import cors from "cors";
 import { authMiddleware } from "./middleware";
 
@@ -130,9 +131,21 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
     },
   });
 
+  const model = await prismaClient.model.findFirst({
+    where: {
+      id: parsedBody.data.modelId,
+    },
+  });
+
+  if (!model) {
+    res.status(411).json({
+      message: "Model not found",
+    });
+  }
+
   let requestIds: { request_id: string }[] = await Promise.all(
     prompts.map((prompt) =>
-      falAIModel.generateImage(prompt.prompt, parsedBody.data.modelId)
+      falAIModel.generateImage(prompt.prompt, model!.tensorPath!)
     )
   );
 
@@ -169,36 +182,88 @@ app.get("/image/bulk", authMiddleware, async (req, res) => {
     where: {
       id: { in: ids },
       userId: req.userId!, // '!' assumes it exists and in not undefined
+      status: {
+        not: "Failed", // Exclude images with status 'Failed'
+      },
     },
+    orderBy: {
+      createdAt: "desc", // Order by createdAt in descending order
+    },
+
     take: parseInt(limit),
     skip: parseInt(offset),
   });
   res.json({ images: imageData });
 });
 
+app.get("/models", authMiddleware, async (req, res) => {
+  const models = await prismaClient.model.findMany({
+    where: {
+      OR: [
+        {
+          userId: req.userId!,
+        },
+        { open: true },
+      ],
+    },
+  });
+  // console.log("Fetched models:", models);
+  res.json({ models });
+});
+
 app.post("/fal-ai/webhook/train", async (req, res) => {
+  //   console.log("/fal-ai/webhook/train");
+  //   console.log(JSON.stringify(req.body));
+
   //Update the status of the image in the database
-  const request_id = req.body.request_id;
+  const requestId = req.body.request_id as string;
+
+  const result = await fal.queue.result("fal-ai/flux-lora", {
+    requestId,
+  });
+
+  const { imageUrl } = await falAIModel.generateImageSync(
+    result.data.diffusers_lora_file.url
+  );
+
   await prismaClient.model.updateMany({
     //updateMany, coz update is used to update a single record
-    where: { falAiRequestId: request_id },
+    where: { falAiRequestId: requestId },
     data: {
       trainingStatus: "Generated",
-      tensorPath: req.body.tensor_Path,
+      //@ts-ignore
+      tensorPath: result.data.diffusers_lora_file.url,
+      thumbnail: imageUrl,
     },
   });
   res.json({ message: "Webhook received successfully" });
 });
 
 app.post("/fal-ai/webhook/image", async (req, res) => {
+  console.log("/fal-ai/webhook/image");
+  console.log(req.body);
   //Update the status of the image in the database
   const request_id = req.body.request_id;
+
+  if (req.body.status == "ERROR") {
+    res.status(411).json({});
+    prismaClient.outputImages.updateMany({
+      //updateMany, coz 'update' is used to update a single record and will give an error at 'where'
+      where: { falAiRequestId: request_id },
+      data: {
+        status: "Failed",
+        imageUrl: req.body.payload.images[0].url,
+      },
+    });
+    return;
+  }
+
   await prismaClient.outputImages.updateMany({
     //updateMany, coz 'update' is used to update a single record and will give an error at 'where'
     where: { falAiRequestId: request_id },
     data: {
       status: "Generated",
-      imageUrl: req.body.image_url,
+      imageUrl: req.body.payload.images[0].url,
     },
   });
   res.json({ message: "Webhook received successfully" });

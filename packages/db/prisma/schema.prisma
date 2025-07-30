@@ -31,15 +31,17 @@ model Model {
   eyeColor       EyeColorEnum
   bald           Boolean
   userId         String
-  zipUrl         String // to store the zip URL of the training images
+  zipUrl         String // to store the zip URL of the training images 
   triggerWord    String?
   tensorPath     String?
+  thumbnail      String?
   falAiRequestId String? // to store the request ID from FAL AI for tracking
   trainingStatus ModelTrainingStatusEnum @default(Pending)
   //trainingImages TrainingImages[]
   outputImages   OutputImages[]
   createdAt      DateTime                @default(now())
   updatedAt      DateTime                @updatedAt
+  open           Boolean                 @default(false)
 
   @@index([falAiRequestId])
 }

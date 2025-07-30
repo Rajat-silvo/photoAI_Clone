@@ -1,10 +1,13 @@
 import { BaseModel } from "./BaseModel";
 import { fal } from "@fal-ai/client";
 
-export class FalAIModel extends BaseModel {
-  constructor() {
-    super();
-  }
+export class FalAIModel {
+  constructor() {}
+
+  // export class FalAIModel extends BaseModel {
+  //   constructor() {
+  //     super();
+  //   }
 
   public async generateImage(prompt: string, tensorPath: string) {
     // FAL AI
@@ -34,5 +37,18 @@ export class FalAIModel extends BaseModel {
       }
     );
     return { request_id, response_url };
+  }
+
+  public async generateImageSync(tensorPath: string) {
+    const response = await fal.subscribe("fal-ai/flux-lora", {
+      input: {
+        prompt:
+          "Generate a head shot for this user in front of a white background",
+        loras: [{ path: tensorPath, scale: 1 }],
+      },
+    });
+    return {
+      imageUrl: response.data.images[0]!.url,
+    };
   }
 }

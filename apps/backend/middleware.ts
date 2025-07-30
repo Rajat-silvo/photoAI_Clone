@@ -14,8 +14,10 @@ export function authMiddleware(
     });
 
     if (decoded?.sub) {
-      next();
       req.userId = decoded?.sub; // Attach user ID to request object, this will give error if types.d.ts is not created
+      next();
+    } else {
+      res.status(403).json({ message: "Error while decoding JWT" });
     }
   } catch (e) {
     res.status(403).json({ message: "Error while decoding JWT" });
