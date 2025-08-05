@@ -7,6 +7,7 @@ import { fal } from "@fal-ai/client";
 import cors from "cors";
 import { authMiddleware } from "./middleware";
 
+//const PORT = process.env.PORT || 8000;
 const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -271,5 +272,8 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  //console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(
+    `Server is running on https://photo-ai-clone-web.vercel.app/:${PORT}`
+  );
 });
