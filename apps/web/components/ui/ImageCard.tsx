@@ -1,4 +1,5 @@
 import { Skeleton } from "./skeleton";
+import Image from "next/image";
 
 export interface TImage {
   id: string;

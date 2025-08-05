@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "@/app/config";
 import { useAuth } from "@clerk/nextjs";
+import Image from "next/image";
 
 export interface TPack {
   //details of a pack that will be shown to the users - Name, Demo Image(thumbnail), Description
@@ -33,7 +34,7 @@ export function PackCard(props: TPack & { selectedModelId: string }) {
       }}
     >
       <div className="flex p-4 gap-4">
-        <img
+        {/* <img
           src={props.imageUrl1}
           alt="Pack1"
           width="50%"
@@ -44,6 +45,20 @@ export function PackCard(props: TPack & { selectedModelId: string }) {
           alt="Pack2"
           width="50%"
           className="rounded"
+        /> */}
+        <Image
+          src={props.imageUrl1}
+          alt="Pack1"
+          width={100}
+          height={200}
+          className="rounded w-1/2"
+        />
+        <Image
+          src={props.imageUrl2}
+          alt="Pack2"
+          width={100}
+          height={200}
+          className="rounded w-1/2"
         />
       </div>
 

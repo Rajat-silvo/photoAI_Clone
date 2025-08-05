@@ -3,6 +3,7 @@ import axios from "axios";
 import { BACKEND_URL } from "@/app/config";
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface TModel {
@@ -43,17 +44,24 @@ export function SelectModel({
         <div className="grid grid-cols-4 gap-2 p-5">
           {models.map((model) => (
             <div
-              className={`${selectedModel === model.id ? "border border-red-400" : "border border-gray-700"} cursor-pointer rounded p-2 w-full`}
+              key={model.id}
+              className={`${selectedModel === model.id ? "border-red-400" : ""} cursor-pointer border rounded p-2 w-full`}
               onClick={() => {
                 setSelectedModel(model.id);
               }}
             >
               <div className="flex justify-between flex-col h-full">
-                <div>
-                  <img
+                <div className="relative aspect-square">
+                  {/* <img
                     src={model.thumbnail}
                     alt="Model Thumbnail"
                     className="rounded"
+                  /> */}
+                  <Image
+                    src={model.thumbnail}
+                    alt={`Thumbnail for ${model.name}`}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
                   />
                 </div>
                 <div className="pt-6">{model.name}</div>

@@ -22,12 +22,13 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { UploadModal } from "@/components/ui/upload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TrainModelInput } from "common/inferred";
 import axios from "axios";
 import { BACKEND_URL } from "@/app/config";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 export default function Train() {
   const { getToken } = useAuth(); //to get current session's jwt token from Clerk
@@ -39,9 +40,70 @@ export default function Train() {
   const [eyeColor, setEyeColor] = useState<string>();
   const [bald, setBald] = useState(false);
   const [name, setName] = useState("");
+  const [modelTraining, setModelTraining] = useState(false);
   const router = useRouter();
+  const [modelId, setModelId] = useState<string | null>(null);
+  const [trainingStatus, setTrainingStatus] = useState<string | null>(null);
+
+  // Check training status periodically if we have a modelId
+  useEffect(() => {
+    if (!modelId) return;
+
+    const checkStatus = async () => {
+      try {
+        const token = await getToken();
+        const response = await axios.get(
+          `${BACKEND_URL}/model/status/${modelId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (response.data.success) {
+          setTrainingStatus(response.data.model.status);
+
+          // If training is complete, stop checking
+          if (
+            response.data.model.status === "Generated" ||
+            response.data.model.status === "Failed"
+          ) {
+            if (response.data.model.status === "Generated") {
+              toast.success("Model training completed successfully!");
+              router.refresh();
+            } else {
+              toast.error("Model training failed. Please try again.");
+            }
+            setModelId(null);
+            setModelTraining(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking model status:", error);
+      }
+    };
+
+    checkStatus();
+
+    const interval = setInterval(checkStatus, 10000);
+    return () => clearInterval(interval);
+  }, [modelId, getToken, router]);
 
   async function trainModel() {
+    if (!zipUrl) {
+      toast.error("Please upload images first");
+      return;
+    }
+
+    if (!name) {
+      toast.error("Please enter a model name");
+      return;
+    }
+
+    if (!type || !age || !ethnicity || !eyeColor) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
     //Add types here
     const input = {
       zipUrl,
@@ -52,17 +114,41 @@ export default function Train() {
       bald,
       name,
     };
-    const token = await getToken(); // Get the JWT token from Clerk
-    const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
-      //Backend authentication - using Clerk(slower requests) OR getting Client-side JWT from Clerk(faster requests) and sending it in headers in the backend requests
-      headers: {
-        Authorization: `Bearer ${token}`,
-        // "Content-Type": "application/json",
-        // Authorization: `B32earer ${localStorage.getItem("clerkAuthToken")}`,
-      },
-    });
-    router.push("/");
+
+    try {
+      const token = await getToken(); // Get the JWT token from Clerk
+      setModelTraining(true);
+
+      const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
+        //Backend authentication - using Clerk(slower requests) OR getting Client-side JWT from Clerk(faster requests) and sending it in headers in the backend requests
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // "Content-Type": "application/json",
+          // Authorization: `B32earer ${localStorage.getItem("clerkAuthToken")}`,
+        },
+      });
+
+      if (response.data.modelId) {
+        setModelId(response.data.modelId);
+        toast.success(
+          "Model training started! This will take approximately 20 minutes."
+        );
+        router.push("/");
+      } else {
+        toast.error("Failed to start model training");
+        setModelTraining(false);
+      }
+    } catch (error) {
+      console.error("Training error:", error);
+      toast.error(
+        (error as Error & { response?: { data?: { message?: string } } })
+          .response?.data?.message || "Failed to start model training"
+      );
+      setModelTraining(false);
+    }
   }
+
+  const isFormValid = name && zipUrl && type && age && ethnicity && eyeColor;
 
   return (
     <div className="flex flex-col items-center justify-center pt-4">
@@ -187,10 +273,19 @@ export default function Train() {
           <Button
             type="submit"
             className="w-full"
-            disabled={!zipUrl || !type || !age || !ethnicity || !eyeColor}
+            // disabled={!zipUrl || !type || !age || !ethnicity || !eyeColor}
             onClick={trainModel}
+            disabled={modelTraining || !isFormValid}
           >
-            Train Model
+            {modelTraining ? (
+              <>
+                {trainingStatus
+                  ? `Training: ${trainingStatus}...`
+                  : "Training..."}
+              </>
+            ) : (
+              <>Train Model (20 credits)</>
+            )}
           </Button>
           <CardAction className="w-full">
             <Button

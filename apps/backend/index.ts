@@ -223,6 +223,7 @@ app.post("/fal-ai/webhook/train", async (req, res) => {
   });
 
   const { imageUrl } = await falAIModel.generateImageSync(
+    //@ts-ignore
     result.data.diffusers_lora_file.url
   );
 

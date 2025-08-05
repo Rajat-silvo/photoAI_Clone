@@ -1,3 +1,4 @@
+/// MAIN
 "use client";
 import axios from "axios";
 import { BACKEND_URL } from "@/app/config";
@@ -29,7 +30,7 @@ export function Gallery() {
     <div className="grid md:grid-cols-4 gap-4 p-4 grids-cols-1">
       {/* this one, md:grid-cols 3 or 4  */}
       {images.map((image) => (
-        <ImageCard {...image} />
+        <ImageCard key={image.id} {...image} />
       ))}
       {imagesLoading && <ImageCardSkeleton></ImageCardSkeleton>}
     </div>

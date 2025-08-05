@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -22,13 +23,13 @@ export function Hero() {
   return (
     <div className="flex justify-center">
       <div className="max-w-5xl">
-        <br />
-        <br />
-        <h1 className="text-4xl p-2 text-center ">Welcome to PhotoAI</h1>
-        <p className="text-7xl text-center p-2 font-bold pb-4">
+        {/* <br /> */}
+        {/* <br /> */}
+        <h1 className="text-3xl p-2 text-center ">Welcome to PhotoAI</h1>
+        <p className="text-6xl text-center p-2 font-bold pb-4">
           Generate Images for yourself and your family
         </p>
-        <br />
+        {/* <br /> */}
         <br />
         <Carousel
           plugins={[
@@ -39,34 +40,74 @@ export function Hero() {
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <img
+              {/* <img
                 src="https://cdn.dribbble.com/userupload/29421930/file/original-57e8bed3bcd878be405419a3c9905516.jpg?format=webp&resize=400x300&vertical=center"
                 alt="1"
-              />
+              /> */}
+              <div className="relative aspect-square group">
+                <Image
+                  src="https://cdn.dribbble.com/userupload/29421930/file/original-57e8bed3bcd878be405419a3c9905516.jpg?format=webp&resize=400x300&vertical=center"
+                  alt="1"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
+                />
+              </div>
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <img
+              {/* <img
                 src="https://cdn.dribbble.com/userupload/28508468/file/original-1337290ded3efe937873bbeaec533042.jpg?format=webp&resize=400x300&vertical=center"
                 alt="2"
-              />
+              /> */}
+              <div className="relative aspect-square group">
+                <Image
+                  src="https://cdn.dribbble.com/userupload/28508468/file/original-1337290ded3efe937873bbeaec533042.jpg?format=webp&resize=400x300&vertical=center"
+                  alt="2"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
+                />
+              </div>
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <img
+              {/* <img
                 src="https://cdn.dribbble.com/userupload/18316354/file/original-c92e853d822351c5906e880d3e4fb2bd.jpg?format=webp&resize=400x300&vertical=center"
                 alt="3"
-              />
+              /> */}
+              <div className="relative aspect-square group">
+                <Image
+                  src="https://cdn.dribbble.com/userupload/18316354/file/original-c92e853d822351c5906e880d3e4fb2bd.jpg?format=webp&resize=400x300&vertical=center"
+                  alt="3"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
+                />
+              </div>
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <img
+              {/* <img
                 src="https://cdn.dribbble.com/userupload/18788132/file/original-f6c01cc687c499874b2ee6beb9994e18.jpg?format=webp&resize=400x300&vertical=center"
                 alt="4"
-              />
+              /> */}
+              <div className="relative aspect-square group">
+                <Image
+                  src="https://cdn.dribbble.com/userupload/18788132/file/original-f6c01cc687c499874b2ee6beb9994e18.jpg?format=webp&resize=400x300&vertical=center"
+                  alt="4"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
+                />
+              </div>
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <img
+              {/* <img
                 src="https://cdn.dribbble.com/userupload/43917998/file/original-ce60ffa8236a789b639310f3c257a5e1.jpg?crop=0x349-1448x1435&format=webp&resize=640x480&vertical=center"
                 alt="5"
-              />
+              /> */}
+              <div className="relative aspect-square group">
+                <Image
+                  src="https://cdn.dribbble.com/userupload/43917998/file/original-ce60ffa8236a789b639310f3c257a5e1.jpg?crop=0x349-1448x1435&format=webp&resize=640x480&vertical=center"
+                  alt="5"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
+                />
+              </div>
             </CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
