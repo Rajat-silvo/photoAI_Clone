@@ -39,7 +39,15 @@ This project leverages a modern, powerful, and scalable tech stack.
 This project is a monorepo managed by Turborepo. The codebase is organized into `apps` and `packages`.
 
 
-/ ├── apps/ │   ├── backend/      # Backend Express.js app (powered by Bun) │   └── web/         # Frontend Next.js app │ ├── packages/ │   ├── db/          # Prisma schema and database configurations │   ├── eslint-config/ # Shared ESLint configurations │   ├── tsconfig/    # Shared TypeScript configurations │   └── ui/          # Shared React components (using ShadCN) │ └── package.json
+/ ├── apps/ 
+│ ├── backend/      # Backend Express.js app (powered by Bun) 
+│ └── web/         # Frontend Next.js app 
+│ ├── packages/ 
+│   ├── db/          # Prisma schema and database configurations 
+│   ├── eslint-config/ # Shared ESLint configurations 
+│   ├── tsconfig/    # Shared TypeScript configurations 
+│   └── ui/          # Shared React components (using ShadCN) 
+│ └── package.json
 
 
 * **`apps/web`**: The main user-facing Next.js application.
