@@ -1,135 +1,122 @@
-# Turborepo starter
+# PhotoAI Clone 📸✨
 
-This Turborepo starter is maintained by the Turborepo core team.
+This project is a full-stack clone of PhotoAI, a platform where users can train a personalized AI model on their own images. Once the model is trained, users can generate new, high-quality images of themselves in various styles and themes using simple text prompts or pre-defined image packs.
 
-## Using this example
+---
 
-Run the following command:
+## 🚀 Key Features
 
-```sh
-npx create-turbo@latest
-```
+* **Custom AI Model Training:** Users can upload a set of their photos (conveniently packaged in a `.zip` file) to train a unique image generation model.
+* **Personalized Image Generation:** Generate images with your face by providing a descriptive text prompt.
+* **Themed Image Packs:** Create batches of images based on exciting, pre-defined themes like "Valentine's Day" or "Millionaire."
+* **Secure Authentication:** User management and authentication handled securely by Clerk.
+* **Scalable File Storage:** All user-uploaded images and generated content are stored reliably on Cloudflare R2.
+* **Monorepo Architecture:** Built with Turborepo for efficient management of the frontend and backend codebases.
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## 🛠️ Tech Stack
 
-### Apps and Packages
+This project leverages a modern, powerful, and scalable tech stack.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+| Area                  | Technology / Service                                                              |
+| --------------------- | --------------------------------------------------------------------------------- |
+| **Monorepo** | [Turborepo](https://turbo.build/repo)                                             |
+| **Frontend** | [Next.js](https://nextjs.org/), [React](https://react.dev/)                        |
+| **Backend** | [Bun](https://bun.sh/), [Express.js](https://expressjs.com/)                       |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/), [ShadCN/UI](https://ui.shadcn.com/)      |
+| **Database** | [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/) |
+| **AI Image Generation** | [Fal.AI](https://fal.ai/)                                                         |
+| **Authentication** | [Clerk](https://clerk.com/)                                                       |
+| **File Storage** | [Cloudflare R2](https://www.cloudflare.com/products/r2/)                          |
+| **Libraries** | [JSZip](https://stuk.github.io/jszip/)                                            |
+| **Deployment** | Frontend on [Vercel](https://vercel.com/), Backend on [Render](https://render.com/) |
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+---
 
-### Utilities
+## 📂 Project Structure
 
-This Turborepo has some additional tools already setup for you:
+This project is a monorepo managed by Turborepo. The codebase is organized into `apps` and `packages`.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+* **`apps/web`**: The main user-facing Next.js application.
+* **`apps/backend`**: The backend API built with Express and running on the Bun runtime. It handles API requests, database interactions, and communication with the Fal.AI service.
+* **`packages/db`**: Contains the Prisma schema, client, and any database-related utilities. It's shared between the `server` and potentially the `web` app if needed.
+* **`packages/ui`**: A collection of shared UI components built with ShadCN/UI, ensuring a consistent look and feel across the application.
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## 🏁 Getting Started
 
-```
-cd my-turborepo
+Follow these instructions to get the project up and running on your local machine.
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+### Prerequisites
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+* [Node.js](https://nodejs.org/en) (v18 or later)
+* [Bun](https://bun.sh/)
+* [pnpm](https://pnpm.io/) (or your preferred package manager)
+* Access keys for Clerk, Cloudflare R2, Fal.AI, and Postgres database URL.
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Installation & Setup
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/your-username/photoai-clone.git](https://github.com/your-username/photoai-clone.git)
+    cd photoai-clone
+    ```
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+2.  **Install dependencies:**
+    From the root of the project, run:
+    ```bash
+    bun install
+    ```
 
-### Develop
+3.  **Set up environment variables:**
+    Create a `.env` file in the `apps/server` directory and another one in the `apps/web` directory. Populate them based on the `.env.example` files in each respective directory.
 
-To develop all apps and packages, run the following command:
+    **`apps/web/.env`:**
+    ```env
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+    CLERK_SECRET_KEY=sk_...
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+    ```
 
-```
-cd my-turborepo
+    **`apps/server/.env`:**
+    ```env
+    DATABASE_URL="postgresql://..."
+    FAL_AI_KEY="your-fal-ai-key"
+    CLOUDFLARE_R2_ACCESS_KEY_ID="..."
+    CLOUDFLARE_R2_SECRET_ACCESS_KEY="..."
+    CLOUDFLARE_R2_BUCKET_NAME="..."
+    CLOUDFLARE_R2_ACCOUNT_ID="..."
+    CLOUDFLARE_R2_PUBLIC_URL="https://your-public-r2-url"
+    ```
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+4.  **Push the database schema:**
+    Make sure your PostgreSQL database is running, then run the following command from the database folder to apply the schema:
+    ```bash
+    bunx prisma migrate dev
+    ```
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+5.  **Run the development servers:**
+    This command will start both the frontend and backend applications concurrently.
+    ```bash
+    bun run dev
+    ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+    * The Next.js frontend will be available at `http://localhost:3000`.
+    * The Express.js backend will be available at `http://localhost:8000`.
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+## 🚀 Deployment
 
-### Remote Caching
+The application is deployed to two separate services:
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+* **Frontend (`apps/web`):** Deployed on **[Vercel](https://vercel.com/)**. Vercel provides seamless integration with Next.js for optimal performance and CI/CD.
+* **Backend (`apps/backend`):** Deployed on **[Render](https://render.com/)**. Render is used to host the Express.js backend server and the PostgreSQL database.
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+---
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
