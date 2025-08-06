@@ -67,7 +67,7 @@ Follow these instructions to get the project up and running on your local machin
 2.  **Install dependencies:**
     From the root of the project, run:
     ```bash
-    pnpm install
+    bun install
     ```
 
 3.  **Set up environment variables:**
@@ -95,15 +95,15 @@ Follow these instructions to get the project up and running on your local machin
     ```
 
 4.  **Push the database schema:**
-    Make sure your PostgreSQL database is running, then run the following command from the root to apply the schema:
+    Make sure your PostgreSQL database is running, then run the following command from the database folder to apply the schema:
     ```bash
-    pnpm db:push
+    bunx prisma migrate dev
     ```
 
 5.  **Run the development servers:**
     This command will start both the frontend and backend applications concurrently.
     ```bash
-    pnpm dev
+    bun run dev
     ```
 
     * The Next.js frontend will be available at `http://localhost:3000`.
