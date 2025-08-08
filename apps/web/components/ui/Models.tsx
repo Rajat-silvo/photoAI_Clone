@@ -61,10 +61,18 @@ export function SelectModel({
                     src={model.thumbnail}
                     alt={`Thumbnail for ${model.name}`}
                     fill
+                    sizes="(max-width: 768px) 100vw,
+                    (max-width: 1200px) 50vw,
+                    33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105 rounded"
                   />
                 </div>
-                <div className="pt-6">{model.name}</div>
+                {/* <div className="pt-6">{model.name}</div> */}
+                <div className="pt-4 sm:pt-6">
+                  <p className="text-sm sm:text-base font-medium text-gray-900 dark:text-gray-100 truncate sm:line-clamp-2 leading-tight">
+                    {model.name}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

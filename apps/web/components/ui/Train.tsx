@@ -14,9 +14,7 @@ import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
-  //SelectGroup,
   SelectItem,
-  //SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -31,9 +29,8 @@ import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 
 export default function Train() {
-  const { getToken } = useAuth(); //to get current session's jwt token from Clerk
+  const { getToken } = useAuth();
   const [zipUrl, setZipUrl] = useState("");
-  //probably should use FORMS in react
   const [type, setType] = useState("Man");
   const [age, setAge] = useState<string>();
   const [ethnicity, setEthnicity] = useState<string>();
@@ -62,7 +59,6 @@ export default function Train() {
         if (response.data.success) {
           setTrainingStatus(response.data.model.status);
 
-          // If training is complete, stop checking
           if (
             response.data.model.status === "Generated" ||
             response.data.model.status === "Failed"
@@ -83,7 +79,6 @@ export default function Train() {
     };
 
     checkStatus();
-
     const interval = setInterval(checkStatus, 10000);
     return () => clearInterval(interval);
   }, [modelId, getToken, router]);
@@ -104,7 +99,6 @@ export default function Train() {
       return;
     }
 
-    //Add types here
     const input = {
       zipUrl,
       type,
@@ -116,15 +110,12 @@ export default function Train() {
     };
 
     try {
-      const token = await getToken(); // Get the JWT token from Clerk
+      const token = await getToken();
       setModelTraining(true);
 
       const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
-        //Backend authentication - using Clerk(slower requests) OR getting Client-side JWT from Clerk(faster requests) and sending it in headers in the backend requests
         headers: {
           Authorization: `Bearer ${token}`,
-          // "Content-Type": "application/json",
-          // Authorization: `B32earer ${localStorage.getItem("clerkAuthToken")}`,
         },
       });
 
@@ -151,46 +142,58 @@ export default function Train() {
   const isFormValid = name && zipUrl && type && age && ethnicity && eyeColor;
 
   return (
-    <div className="flex flex-col items-center justify-center pt-4">
-      <Card className="w-[500px]  px-4">
-        <CardHeader className="text-center">
-          <CardTitle>Model Training</CardTitle>
-          <CardDescription className="text-center">
-            Train your own model
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex gap-4">
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="name">Name</Label>
+    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 sm:p-6">
+      <div className="w-full max-w-lg">
+        <Card className="w-full">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-xl sm:text-2xl">
+              Model Training
+            </CardTitle>
+            <CardDescription className="text-center text-sm sm:text-base">
+              Train your own model
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6">
+            <form className="space-y-4 sm:space-y-6">
+              {/* Name and Age Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm font-medium">
+                    Name
+                  </Label>
                   <Input
                     onChange={(e) => setName(e.target.value)}
                     id="name"
                     placeholder="Name for your model"
                     required
+                    className="w-full"
                   />
                 </div>
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="age">Age</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="age" className="text-sm font-medium">
+                    Age
+                  </Label>
                   <Input
                     onChange={(e) => setAge(e.target.value)}
                     id="age"
                     type="number"
                     placeholder="Write your Age"
                     required
+                    className="w-full"
                   />
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="type">Type</Label>
+
+              {/* Type and Ethnicity Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type" className="text-sm font-medium">
+                    Type
+                  </Label>
                   <Select onValueChange={(value) => setType(value)}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
-                    {/* <SelectContent side="bottom" avoidCollisions={false}> */}
                     <SelectContent>
                       <SelectItem value="Man">Man</SelectItem>
                       <SelectItem value="Woman">Woman</SelectItem>
@@ -198,14 +201,15 @@ export default function Train() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="ethnicity">Ethnicity</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="ethnicity" className="text-sm font-medium">
+                    Ethnicity
+                  </Label>
                   <Select onValueChange={(value) => setEthnicity(value)}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Ethnicity" />
                     </SelectTrigger>
                     <SelectContent side="bottom" avoidCollisions={false}>
-                      {/* <SelectContent> */}
                       <SelectItem value="White">White</SelectItem>
                       <SelectItem value="Black">Black</SelectItem>
                       <SelectItem value="Asian_American">
@@ -233,15 +237,18 @@ export default function Train() {
                   </Select>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="eyeColor">Eye Color</Label>
+
+              {/* Eye Color and Bald Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="eyeColor" className="text-sm font-medium">
+                    Eye Color
+                  </Label>
                   <Select onValueChange={(value) => setEyeColor(value)}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select eye color" />
                     </SelectTrigger>
                     <SelectContent side="bottom" avoidCollisions={false}>
-                      {/* <SelectContent> */}
                       <SelectItem value="Black">Black</SelectItem>
                       <SelectItem value="Brown">Brown</SelectItem>
                       <SelectItem value="Blue">Blue</SelectItem>
@@ -251,57 +258,370 @@ export default function Train() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex flex-col space-y-1.5 flex-1">
-                  <Label htmlFor="bald">Bald</Label>
-                  <Switch
-                    onClick={(e) => {
-                      setBald(!bald);
-                    }}
-                    className="w-9 h-6"
-                  />
+                <div className="space-y-2">
+                  <Label htmlFor="bald" className="text-sm font-medium">
+                    Bald
+                  </Label>
+                  <div className="flex items-center pt-2">
+                    <Switch
+                      id="bald"
+                      checked={bald}
+                      onCheckedChange={setBald}
+                      className="w-9 h-5"
+                    />
+                  </div>
                 </div>
               </div>
-              <UploadModal
-                onUploadDone={(zipUrl) => {
-                  setZipUrl(zipUrl);
-                }}
-              />
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            // disabled={!zipUrl || !type || !age || !ethnicity || !eyeColor}
-            onClick={trainModel}
-            disabled={modelTraining || !isFormValid}
-          >
-            {modelTraining ? (
-              <>
-                {trainingStatus
-                  ? `Training: ${trainingStatus}...`
-                  : "Training..."}
-              </>
-            ) : (
-              <>Train Model (20 credits)</>
-            )}
-          </Button>
-          <CardAction className="w-full">
+
+              {/* Upload Section */}
+              <div className="pt-2">
+                <UploadModal
+                  onUploadDone={(zipUrl) => {
+                    setZipUrl(zipUrl);
+                  }}
+                />
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter className="flex-col gap-3 px-4 sm:px-6 pb-6">
             <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => router.push("/")}
+              type="submit"
+              className="w-full h-10 sm:h-11 text-sm sm:text-base"
+              onClick={trainModel}
+              disabled={modelTraining || !isFormValid}
             >
-              Cancel
+              {modelTraining ? (
+                <>
+                  {trainingStatus
+                    ? `Training: ${trainingStatus}...`
+                    : "Training..."}
+                </>
+              ) : (
+                <>Train Model (20 credits)</>
+              )}
             </Button>
-          </CardAction>
-        </CardFooter>
-      </Card>
+            <CardAction className="w-full">
+              <Button
+                variant="outline"
+                className="w-full h-10 sm:h-11 text-sm sm:text-base"
+                onClick={() => router.push("/")}
+              >
+                Cancel
+              </Button>
+            </CardAction>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }
 
+///Original
+// "use client";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Card,
+//   CardAction,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import {
+//   Select,
+//   SelectContent,
+//   //SelectGroup,
+//   SelectItem,
+//   //SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import { Switch } from "@/components/ui/switch";
+// import { UploadModal } from "@/components/ui/upload";
+// import { useEffect, useState } from "react";
+// import { TrainModelInput } from "common/inferred";
+// import axios from "axios";
+// import { BACKEND_URL } from "@/app/config";
+// import { useRouter } from "next/navigation";
+// import { useAuth } from "@clerk/nextjs";
+// import toast from "react-hot-toast";
+
+// export default function Train() {
+//   const { getToken } = useAuth(); //to get current session's jwt token from Clerk
+//   const [zipUrl, setZipUrl] = useState("");
+//   //probably should use FORMS in react
+//   const [type, setType] = useState("Man");
+//   const [age, setAge] = useState<string>();
+//   const [ethnicity, setEthnicity] = useState<string>();
+//   const [eyeColor, setEyeColor] = useState<string>();
+//   const [bald, setBald] = useState(false);
+//   const [name, setName] = useState("");
+//   const [modelTraining, setModelTraining] = useState(false);
+//   const router = useRouter();
+//   const [modelId, setModelId] = useState<string | null>(null);
+//   const [trainingStatus, setTrainingStatus] = useState<string | null>(null);
+
+//   // Check training status periodically if we have a modelId
+//   useEffect(() => {
+//     if (!modelId) return;
+
+//     const checkStatus = async () => {
+//       try {
+//         const token = await getToken();
+//         const response = await axios.get(
+//           `${BACKEND_URL}/model/status/${modelId}`,
+//           {
+//             headers: { Authorization: `Bearer ${token}` },
+//           }
+//         );
+
+//         if (response.data.success) {
+//           setTrainingStatus(response.data.model.status);
+
+//           // If training is complete, stop checking
+//           if (
+//             response.data.model.status === "Generated" ||
+//             response.data.model.status === "Failed"
+//           ) {
+//             if (response.data.model.status === "Generated") {
+//               toast.success("Model training completed successfully!");
+//               router.refresh();
+//             } else {
+//               toast.error("Model training failed. Please try again.");
+//             }
+//             setModelId(null);
+//             setModelTraining(false);
+//           }
+//         }
+//       } catch (error) {
+//         console.error("Error checking model status:", error);
+//       }
+//     };
+
+//     checkStatus();
+
+//     const interval = setInterval(checkStatus, 10000);
+//     return () => clearInterval(interval);
+//   }, [modelId, getToken, router]);
+
+//   async function trainModel() {
+//     if (!zipUrl) {
+//       toast.error("Please upload images first");
+//       return;
+//     }
+
+//     if (!name) {
+//       toast.error("Please enter a model name");
+//       return;
+//     }
+
+//     if (!type || !age || !ethnicity || !eyeColor) {
+//       toast.error("Please fill in all required fields");
+//       return;
+//     }
+
+//     //Add types here
+//     const input = {
+//       zipUrl,
+//       type,
+//       age: parseInt(age ?? "0"),
+//       ethnicity,
+//       eyeColor,
+//       bald,
+//       name,
+//     };
+
+//     try {
+//       const token = await getToken(); // Get the JWT token from Clerk
+//       setModelTraining(true);
+
+//       const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
+//         //Backend authentication - using Clerk(slower requests) OR getting Client-side JWT from Clerk(faster requests) and sending it in headers in the backend requests
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           // "Content-Type": "application/json",
+//           // Authorization: `B32earer ${localStorage.getItem("clerkAuthToken")}`,
+//         },
+//       });
+
+//       if (response.data.modelId) {
+//         setModelId(response.data.modelId);
+//         toast.success(
+//           "Model training started! This will take approximately 20 minutes."
+//         );
+//         router.push("/");
+//       } else {
+//         toast.error("Failed to start model training");
+//         setModelTraining(false);
+//       }
+//     } catch (error) {
+//       console.error("Training error:", error);
+//       toast.error(
+//         (error as Error & { response?: { data?: { message?: string } } })
+//           .response?.data?.message || "Failed to start model training"
+//       );
+//       setModelTraining(false);
+//     }
+//   }
+
+//   const isFormValid = name && zipUrl && type && age && ethnicity && eyeColor;
+
+//   return (
+//     <div className="flex flex-col items-center justify-center pt-4">
+//       <Card className="w-[500px]  px-4">
+//         <CardHeader className="text-center">
+//           <CardTitle>Model Training</CardTitle>
+//           <CardDescription className="text-center">
+//             Train your own model
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <form>
+//             <div className="grid w-full items-center gap-4">
+//               <div className="flex gap-4">
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="name">Name</Label>
+//                   <Input
+//                     onChange={(e) => setName(e.target.value)}
+//                     id="name"
+//                     placeholder="Name for your model"
+//                     required
+//                   />
+//                 </div>
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="age">Age</Label>
+//                   <Input
+//                     onChange={(e) => setAge(e.target.value)}
+//                     id="age"
+//                     type="number"
+//                     placeholder="Write your Age"
+//                     required
+//                   />
+//                 </div>
+//               </div>
+//               <div className="flex gap-4">
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="type">Type</Label>
+//                   <Select onValueChange={(value) => setType(value)}>
+//                     <SelectTrigger className="w-[180px]">
+//                       <SelectValue placeholder="Select" />
+//                     </SelectTrigger>
+//                     {/* <SelectContent side="bottom" avoidCollisions={false}> */}
+//                     <SelectContent>
+//                       <SelectItem value="Man">Man</SelectItem>
+//                       <SelectItem value="Woman">Woman</SelectItem>
+//                       <SelectItem value="Others">Others</SelectItem>
+//                     </SelectContent>
+//                   </Select>
+//                 </div>
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="ethnicity">Ethnicity</Label>
+//                   <Select onValueChange={(value) => setEthnicity(value)}>
+//                     <SelectTrigger className="w-[180px]">
+//                       <SelectValue placeholder="Select Ethnicity" />
+//                     </SelectTrigger>
+//                     <SelectContent side="bottom" avoidCollisions={false}>
+//                       {/* <SelectContent> */}
+//                       <SelectItem value="White">White</SelectItem>
+//                       <SelectItem value="Black">Black</SelectItem>
+//                       <SelectItem value="Asian_American">
+//                         Asian American
+//                       </SelectItem>
+//                       <SelectItem value="East_Asian">
+//                         East Asian (Chinese, Japanese, Korean, etc.)
+//                       </SelectItem>
+//                       <SelectItem value="South_East_Asian">
+//                         South East Asian (Thai, Indonesian, Vietnamese, etc.)
+//                       </SelectItem>
+//                       <SelectItem value="South_Asian">
+//                         South Asian (Indian, Pakistani, Bangladeshi, etc.)
+//                       </SelectItem>
+//                       <SelectItem value="Middle_Eastern(Arabic)">
+//                         Middle Eastern (Arabic)
+//                       </SelectItem>
+//                       <SelectItem value="Pacific(Polynesian)">
+//                         Pacific Islander (Polynesian)
+//                       </SelectItem>
+//                       <SelectItem value="Hispanic(Latin American)">
+//                         Hispanic (Latin American)
+//                       </SelectItem>
+//                     </SelectContent>
+//                   </Select>
+//                 </div>
+//               </div>
+//               <div className="flex gap-4">
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="eyeColor">Eye Color</Label>
+//                   <Select onValueChange={(value) => setEyeColor(value)}>
+//                     <SelectTrigger className="w-[180px]">
+//                       <SelectValue placeholder="Select eye color" />
+//                     </SelectTrigger>
+//                     <SelectContent side="bottom" avoidCollisions={false}>
+//                       {/* <SelectContent> */}
+//                       <SelectItem value="Black">Black</SelectItem>
+//                       <SelectItem value="Brown">Brown</SelectItem>
+//                       <SelectItem value="Blue">Blue</SelectItem>
+//                       <SelectItem value="Green">Green</SelectItem>
+//                       <SelectItem value="Hazel">Hazel</SelectItem>
+//                       <SelectItem value="Gray">Gray</SelectItem>
+//                     </SelectContent>
+//                   </Select>
+//                 </div>
+//                 <div className="flex flex-col space-y-1.5 flex-1">
+//                   <Label htmlFor="bald">Bald</Label>
+//                   <Switch
+//                     onClick={(e) => {
+//                       setBald(!bald);
+//                     }}
+//                     className="w-9 h-6"
+//                   />
+//                 </div>
+//               </div>
+//               <UploadModal
+//                 onUploadDone={(zipUrl) => {
+//                   setZipUrl(zipUrl);
+//                 }}
+//               />
+//             </div>
+//           </form>
+//         </CardContent>
+//         <CardFooter className="flex-col gap-3">
+//           <Button
+//             type="submit"
+//             className="w-full"
+//             // disabled={!zipUrl || !type || !age || !ethnicity || !eyeColor}
+//             onClick={trainModel}
+//             disabled={modelTraining || !isFormValid}
+//           >
+//             {modelTraining ? (
+//               <>
+//                 {trainingStatus
+//                   ? `Training: ${trainingStatus}...`
+//                   : "Training..."}
+//               </>
+//             ) : (
+//               <>Train Model (20 credits)</>
+//             )}
+//           </Button>
+//           <CardAction className="w-full">
+//             <Button
+//               variant="outline"
+//               className="w-full"
+//               onClick={() => router.push("/")}
+//             >
+//               Cancel
+//             </Button>
+//           </CardAction>
+//         </CardFooter>
+//       </Card>
+//     </div>
+//   );
+// }
+
+/// 1st gpt for types
 // "use client";
 // import { Button } from "@/components/ui/button";
 // import {
