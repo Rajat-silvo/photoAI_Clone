@@ -147,12 +147,12 @@ export function Hero() {
                       className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-lg"
                     />
                     {/* Gradient Overlay */}
-                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     {/* Text Overlay */}
-                    {/* <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <p className="text-sm font-medium">{img.title}</p>
                       <p className="text-xs opacity-80">{img.desc}</p>
-                    </div> */}
+                    </div>
                   </div>
                 </CarouselItem>
               ))}
@@ -289,7 +289,7 @@ export function Hero() {
       {/* ABOUT */}
       <section
         id="about"
-        className="py-20 w-full max-w-6xl px-4 border-t border-gray-800/50"
+        className="py-30 w-full max-w-6xl px-4 border-t border-gray-800/50"
       >
         <h2 className="text-3xl font-bold text-center mb-8">
           About PhotoAI 🔎
