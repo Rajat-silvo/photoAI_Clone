@@ -19,7 +19,7 @@ export default async function Dashboard() {
         <Tabs defaultValue="gallery" className="w-full">
           {/* Responsive tabs list */}
           <div className="mb-6 flex justify-center">
-            <TabsList className="grid w-full max-w-2xl grid-cols-2 gap-1 md:grid-cols-4 md:gap-0">
+            <TabsList className="grid w-full max-w-2xl grid-cols-4 gap-0 md:gap-0">
               <TabsTrigger
                 value="gallery"
                 className="flex items-center justify-center gap-1 text-xs sm:text-sm md:gap-2"
