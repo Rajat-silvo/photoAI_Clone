@@ -271,6 +271,15 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
   res.json({ message: "Webhook received successfully" });
 });
 
+// Add the health endpoint here
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 app.listen(PORT, () => {
   //console.log(`Server is running on http://localhost:${PORT}`);
   console.log(
