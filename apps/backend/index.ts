@@ -71,6 +71,9 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
 });
 
 app.post("/ai/generate", authMiddleware, async (req, res) => {
+  console.log("=== /ai/generate START ===");
+  console.log("User ID:", req.userId);
+  console.log("Request body:", req.body);
   const parsedBody = GenerateImage.safeParse(req.body);
 
   if (!parsedBody.success) {
