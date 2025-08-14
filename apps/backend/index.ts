@@ -106,6 +106,7 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
       imageUrl: "", // Placeholder for image URL
       userId: req.userId!, //'!' assumes it exists and in not undefined
       // would have to add status field too, which will be updated by fal.ai
+      status: "Pending",
       falAiRequestId: request_id, // Store the request ID for tracking
     },
   });
