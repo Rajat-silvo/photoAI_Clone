@@ -11,17 +11,17 @@ export class FalAIModel {
 
   public async generateImage(prompt: string, tensorPath: string) {
     // FAL AI
-    // const { request_id, response_url } = await fal.queue.submit(
-    //   "fal-ai/flux-lora",
-    //   {
-    //     input: {
-    //       prompt: prompt,
-    //       loras: [{ path: tensorPath, scale: 1 }],
-    //     },
-    //     webhookUrl: `${process.env.WEBHOOK_BASE_URL}/fal-ai/webhook/image`,
-    //   }
-    // );
-    return { request_id: "", response_url: "" };
+    const { request_id, response_url } = await fal.queue.submit(
+      "fal-ai/flux-lora",
+      {
+        input: {
+          prompt: prompt,
+          loras: [{ path: tensorPath, scale: 1 }],
+        },
+        webhookUrl: `${process.env.WEBHOOK_BASE_URL}/fal-ai/webhook/image`,
+      }
+    );
+    return { request_id, response_url };
   }
 
   public async trainModel(zipUrl: string, triggerWord: string) {
@@ -48,7 +48,7 @@ export class FalAIModel {
     //   },
     // });
     return {
-      // imageUrl: response.data.images[0]!.url,
+      //imageUrl: response.data.images[0]!.url,
       imageUrl: "",
     };
   }
