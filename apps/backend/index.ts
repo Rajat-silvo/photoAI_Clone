@@ -71,9 +71,6 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
 });
 
 app.post("/ai/generate", authMiddleware, async (req, res) => {
-  console.log("=== /ai/generate START ===");
-  console.log("User ID:", req.userId);
-  console.log("Request body:", req.body);
   const parsedBody = GenerateImage.safeParse(req.body);
 
   if (!parsedBody.success) {
@@ -245,8 +242,8 @@ app.post("/fal-ai/webhook/train", async (req, res) => {
 });
 
 app.post("/fal-ai/webhook/image", async (req, res) => {
-  console.log("/fal-ai/webhook/image");
-  console.log(req.body);
+  console.log("Webhook received: /fal-ai/webhook/image");
+  console.log("Request body:", req.body);
   //Update the status of the image in the database
   const request_id = req.body.request_id;
 
