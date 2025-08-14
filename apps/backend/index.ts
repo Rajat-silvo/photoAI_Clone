@@ -143,6 +143,7 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
     res.status(411).json({
       message: "Model not found",
     });
+    return;
   }
 
   let requestIds: { request_id: string }[] = await Promise.all(
@@ -155,7 +156,8 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
     data: prompts.map((prompt, index) => ({
       modelId: parsedBody.data.modelId,
       prompt: prompt.prompt,
-      imageURL: "", // Placeholder for image URL
+      imageUrl: "", // Placeholder for image URL
+      status: "Pending", // Initial status set to Pending
       userId: req.userId!, //'!' assumes it exists and in not undefined
       falAiRequestId: requestIds[index]!.request_id,
       //falAiRequestId: requestIds[index]?.request_id ?? "unknown-request-id",

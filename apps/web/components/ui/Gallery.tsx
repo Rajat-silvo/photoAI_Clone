@@ -27,7 +27,7 @@ export function Gallery() {
 
   return (
     // <div className="flex gap-4 flex-wrap">
-    <div className="grid md:grid-cols-4 gap-4 p-4 grids-cols-1">
+    <div className="grid md:grid-cols-3 gap-4 p-4 grids-cols-1">
       {/* this one, md:grid-cols 3 or 4  */}
       {images.map((image) => (
         <ImageCard key={image.id} {...image} />

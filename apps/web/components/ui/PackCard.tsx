@@ -18,7 +18,7 @@ export function PackCard(props: TPack & { selectedModelId: string }) {
     <div
       className="border rounded-xl hover:border-red-400 border-2 p-2 cursor-pointer"
       onClick={async () => {
-        const token = getToken();
+        const token = await getToken();
         await axios.post(
           `${BACKEND_URL}/pack/generate`,
           {
