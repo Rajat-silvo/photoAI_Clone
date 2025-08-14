@@ -56,59 +56,6 @@ Follow these instructions to get the project up and running on your local machin
 * [pnpm](https://pnpm.io/) (or your preferred package manager)
 * Access keys for Clerk, Cloudflare R2, Fal.AI, and Postgres database URL.
 
-### Installation & Setup
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/photoai-clone.git](https://github.com/your-username/photoai-clone.git)
-    cd photoai-clone
-    ```
-
-2.  **Install dependencies:**
-    From the root of the project, run:
-    ```bash
-    bun install
-    ```
-
-3.  **Set up environment variables:**
-    Create a `.env` file in the `apps/server` directory and another one in the `apps/web` directory. Populate them based on the `.env.example` files in each respective directory.
-
-    **`apps/web/.env`:**
-    ```env
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-    CLERK_SECRET_KEY=sk_...
-    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
-    ```
-
-    **`apps/server/.env`:**
-    ```env
-    DATABASE_URL="postgresql://..."
-    FAL_AI_KEY="your-fal-ai-key"
-    CLOUDFLARE_R2_ACCESS_KEY_ID="..."
-    CLOUDFLARE_R2_SECRET_ACCESS_KEY="..."
-    CLOUDFLARE_R2_BUCKET_NAME="..."
-    CLOUDFLARE_R2_ACCOUNT_ID="..."
-    CLOUDFLARE_R2_PUBLIC_URL="https://your-public-r2-url"
-    ```
-
-4.  **Push the database schema:**
-    Make sure your PostgreSQL database is running, then run the following command from the database folder to apply the schema:
-    ```bash
-    bunx prisma migrate dev
-    ```
-
-5.  **Run the development servers:**
-    This command will start both the frontend and backend applications concurrently.
-    ```bash
-    bun run dev
-    ```
-
-    * The Next.js frontend will be available at `http://localhost:3000`.
-    * The Express.js backend will be available at `http://localhost:8000`.
-
 ---
 
 ## 🚀 Deployment
