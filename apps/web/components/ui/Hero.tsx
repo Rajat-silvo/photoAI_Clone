@@ -16,6 +16,40 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle, Upload, Wand2, Download } from "lucide-react";
 
+// Carousel data
+const mainImages = [
+  {
+    src: "https://v3.fal.media/files/rabbit/c5OJGr2__W9ged_dJ7tff_04488b26f7b146d58b2522dad444d85c.jpg",
+    title: "Formal Pack",
+    desc: "Formal and elegant Portraits",
+  },
+  {
+    src: "https://v3.fal.media/files/elephant/UoxsEuMvbe5rfRk_R2uNK_5170d5665c2e44a2b00ead54018997ca.jpg",
+    title: "Winter Pack",
+    desc: "Various Winter Portraits in exotic locations",
+  },
+  {
+    src: "https://v3.fal.media/files/koala/ZdMdBCuX7aZwgmeKrf0c8_6a14b537a13249f3a3f3e4d373a53c41.jpg",
+    title: "Millionaire Pack",
+    desc: "Luxury lifestyle images",
+  },
+  {
+    src: "https://v3.fal.media/files/lion/GpBlAeY0Z71oqW_VavTfj_1873b55b45e3441f9d02a54f4cddce16.jpg",
+    title: "Valentine's Day Pack",
+    desc: "Romantic couple portraits",
+  },
+  {
+    src: "https://v3.fal.media/files/koala/BC696ZBD5e-Q0xAxRZ6BK_95b38cb51d234b7d84c955ad45267688.jpg",
+    title: "Traditional Pack",
+    desc: "Traditional photo styles",
+  },
+  {
+    src: "https://v3.fal.media/files/tiger/jBgq5nI-uLxI_4jwkr6qw_d1b320121c3c43438df584c995a85f9f.jpg",
+    title: "Vacation Explorer Pack",
+    desc: "Epic vacation destinations",
+  },
+];
+
 // Carousel + Packs data
 const heroImages = [
   {
@@ -131,7 +165,7 @@ export function Hero() {
             ]}
           >
             <CarouselContent>
-              {heroImages.map((img, index) => (
+              {mainImages.map((img, index) => (
                 <CarouselItem
                   key={index}
                   className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
