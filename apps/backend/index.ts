@@ -177,7 +177,7 @@ app.get("/pack/bulk", async (req, res) => {
 app.get("/image/bulk", authMiddleware, async (req, res) => {
   const ids = req.query.ids as string[]; // string[] is used otherwise in id: { in: ids} 'in' complains about type mismatch
   //const ids = (req.query.ids as string)?.split(",") || []; // Convert ids to an array
-  const limit = (req.query.limit as string) ?? "10"; // Default limit to 10 if not provided
+  const limit = (req.query.limit as string) ?? "100"; // Default limit to 10 if not provided
   const offset = (req.query.offset as string) ?? "0"; // Default offset to 0 if not provided
 
   console.log(ids);
