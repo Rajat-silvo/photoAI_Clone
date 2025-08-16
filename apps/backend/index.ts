@@ -62,6 +62,7 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
       userId: req.userId!, //'!' assumes it exists and in not undefined
       zipUrl: parsedBody.data.zipUrl, // zipUrl is provided in the request using JSZip
       falAiRequestId: request_id,
+      trainingStatus: "Pending",
     },
   });
 
