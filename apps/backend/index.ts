@@ -415,6 +415,48 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
   res.json({ message: "Webhook received successfully" });
 });
 
+app.get("/model/status/:modelId", authMiddleware, async (req, res) => {
+  try {
+    const modelId = req.params.modelId;
+
+    const model = await prismaClient.model.findUnique({
+      where: {
+        id: modelId,
+        userId: req.userId,
+      },
+    });
+
+    if (!model) {
+      res.status(404).json({
+        success: false,
+        message: "Model not found",
+      });
+      return;
+    }
+
+    // Return basic model info with status
+    res.json({
+      success: true,
+      model: {
+        id: model.id,
+        name: model.name,
+        status: model.trainingStatus,
+        thumbnail: model.thumbnail,
+        createdAt: model.createdAt,
+        updatedAt: model.updatedAt,
+      },
+    });
+    return;
+  } catch (error) {
+    console.error("Error checking model status:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to check model status",
+    });
+    return;
+  }
+});
+
 // Add the health endpoint here
 app.get("/health", (req, res) => {
   res.status(200).json({
