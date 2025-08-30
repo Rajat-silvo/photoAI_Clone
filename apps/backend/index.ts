@@ -63,6 +63,7 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
       zipUrl: parsedBody.data.zipUrl, // zipUrl is provided in the request using JSZip
       falAiRequestId: request_id,
       trainingStatus: "Pending",
+      triggerWord: parsedBody.data.name,
     },
   });
 
